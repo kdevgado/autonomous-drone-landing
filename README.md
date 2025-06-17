@@ -77,6 +77,7 @@ sudo docker run -it \
   --device=/dev/bus/usb \
   --volume="/dev/bus/usb:/dev/bus/usb" \
   --volume="$PWD:/ros2_ws" \
+  --name drone \
   img
 ```
 
@@ -116,7 +117,6 @@ Start each required node manually in separate terminals or backgrounded processe
    python3 src/guide_arm_takeoff/scripts/guide_arm_takeoff.py
 
 ### 🧩 Open a New Bash Terminal in a Running Container
-
-    ```bash
-    docker exec -it <container_name_or_id> bash
-    ```
+```bash
+sudo docker exec -it drone bash
+```

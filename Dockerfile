@@ -102,10 +102,13 @@ RUN cd /opt && \
     cp /opt/librealsense/config/99-realsense-libusb.rules /etc/udev/rules.d/
 
 # Copy source files to /root/ros2_ws
-COPY ./src /root/ros2_ws/src
+#COPY ./src /root/ros2_ws/src
 
-WORKDIR /root/ros2_ws
+WORKDIR /ros2_ws
 
+COPY launch_drone.sh /ros2_ws/launch_drone.sh
+RUN chmod +x launch_drone.sh
+ENTRYPOINT ["/ros2_ws/launch_drone.sh"]
 #COPY entrypoint.sh /entrypoint.sh
 #RUN chmod +x /entrypoint.sh
 #ENTRYPOINT ["/entrypoint.sh"]
