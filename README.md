@@ -111,4 +111,12 @@ Start each required node manually in separate terminals or backgrounded processe
    ros2 launch landing_pad_detector detector
    ```
 
-Other services (like `localisation_server` and `map_server`) can be started based on your specific runtime needs.
+4. **Start the control Node**
+   ```bash
+   python3 src/guide_arm_takeoff/scripts/guide_arm_takeoff.py
+
+### 🧩 Open a New Bash Terminal in a Running Container
+
+    ```bash
+    docker exec -it <container_name_or_id> bash
+    ```
