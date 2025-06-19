@@ -10,7 +10,7 @@ from mavros_msgs.msg import State
 
 class FoxgloveBridge(Node):
     def __init__(self):
-        super().__init__('foxglove_bridge')
+        super().__init__('diagnostics')
 
         self.create_subscription(State, '/mavros/state', self.state_cb, qos_profile=qos_profile_sensor_data)
         self.create_subscription(Imu, '/mavros/imu/data', self.imu_cb, qos_profile=qos_profile_sensor_data)
@@ -18,7 +18,7 @@ class FoxgloveBridge(Node):
 #        self.create_subscription(TwistStamped, '/mavros/local_position/velocity_local', self.velocity_cb, qos_profile=qos_profile_sensor_data)
         self.create_subscription(ESCTelemetry, '/mavros/esc_telemetry/telemetry', self.esc_telemetry_cb, qos_profile = qos_profile_sensor_data)
 
-        self.state_pub = self.create_publisher(StateInfo, 'foxglove_bridge/state', 10)
+        self.state_pub = self.create_publisher(StateInfo, 'diagnostics/state', 10)
         self.battery_pub = self.create_publisher(BatteryInfo, '/foxglove_bridge/battery',10)
         self.esc_telemetry_pub = self.create_publisher(EscArrayInfo, 'foxglove_bridge/esc_telemetry',10)
 

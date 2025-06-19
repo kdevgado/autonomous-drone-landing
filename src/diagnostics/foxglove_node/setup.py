@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'foxglove_node'
+package_name = 'diagnostics'
 
 setup(
     name=package_name,
@@ -20,7 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-                'bridge_node = foxglove_node.bridge_node:main'
+                'diagnostics_node = diagnostics.diagnostics_node:main'
         ],
     },
 )

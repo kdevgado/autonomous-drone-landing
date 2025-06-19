@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
+from std_msgs.msg import Image
 import cv2
 import numpy as np
 import time
@@ -9,6 +10,8 @@ class CombinedDetector(Node):
     def __init__(self):
         super().__init__('combined_detector')
         self.publisher_ = self.create_publisher(String, 'landing_status', 10)
+        self.publisher_ = self.create_publisher(Image, 'annotated_landing_feed', 10)
+        self.bridge = cv2.CvBridge()
         self.cap = cv2.VideoCapture(4)  # Change camera index as needed
         if not self.cap.isOpened():
             self.get_logger().error("Could not open camera.")
@@ -45,6 +48,8 @@ class CombinedDetector(Node):
             cx = int(moments["m10"] / moments["m00"])
             cy = int(moments["m01"] / moments["m00"])
             detected = True
+            cv2.rectangle(frame, (cx - 15, cy - 15), (cx + 15, cy + 15), (255, 0, 0), 2)
+
             if self.is_centered((cx-15, cy-15, 30, 30), frame.shape):
                 status_msg.data = "LANDING_SAFE_COLOR"
                 self.get_logger().info("detected landing pad")
@@ -63,6 +68,7 @@ class CombinedDetector(Node):
                     approx = cv2.approxPolyDP(cnt, 0.02 * cv2.arcLength(cnt, True), True)
                     if len(approx) >= 4:
                         x, y, w, h = cv2.boundingRect(approx)
+                        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                         cx = x + w // 2
                         cy = y + h // 2
                         detected = True
@@ -76,6 +82,8 @@ class CombinedDetector(Node):
             status_msg.data = "SEARCHING_MARKER"
 
         self.publisher_.publish(status_msg)
+        image_msg = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
+        self.image_pub.publish(image_msg)
         end = time.time()
         elapsed_ms = (end - start) * 1000
         self.get_logger().info(f"Detection Time: {elapsed_ms:.2f} ms, Status: {status_msg.data}")
