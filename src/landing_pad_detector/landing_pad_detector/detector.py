@@ -9,7 +9,7 @@ class CombinedDetector(Node):
     def __init__(self):
         super().__init__('combined_detector')
         self.publisher_ = self.create_publisher(String, 'landing_status', 10)
-        self.cap = cv2.VideoCapture(9)  # Change camera index as needed
+        self.cap = cv2.VideoCapture(4)  # Change camera index as needed
         if not self.cap.isOpened():
             self.get_logger().error("Could not open camera.")
             exit()

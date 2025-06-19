@@ -14,6 +14,7 @@ RUN DEBIAN_FRONTEND='noninteractive' apt-get update && apt-get install -y \
     git \
     wget \
     cmake \
+    tmux \
     default-jre \
     build-essential \
     python3-colcon-common-extensions \
@@ -106,9 +107,9 @@ RUN cd /opt && \
 
 WORKDIR /ros2_ws
 
-COPY launch_drone.sh /ros2_ws/launch_drone.sh
-RUN chmod +x launch_drone.sh
-ENTRYPOINT ["/ros2_ws/launch_drone.sh"]
+COPY launch_drone.sh /launch_drone.sh
+RUN chmod +x /launch_drone.sh
+ENTRYPOINT ["/launch_drone.sh"]
 #COPY entrypoint.sh /entrypoint.sh
 #RUN chmod +x /entrypoint.sh
 #ENTRYPOINT ["/entrypoint.sh"]
