@@ -1,7 +1,9 @@
 import rclpy
+from rclpy.executors import MultiThreadedExecutor
 from rclpy.node import Node
 from std_msgs.msg import String
-from std_msgs.msg import Image
+from sensor_msgs.msg import Image
+from cv_bridge import CvBridge
 import cv2
 import numpy as np
 import time
@@ -10,8 +12,8 @@ class CombinedDetector(Node):
     def __init__(self):
         super().__init__('combined_detector')
         self.publisher_ = self.create_publisher(String, 'landing_status', 10)
-        self.publisher_ = self.create_publisher(Image, 'annotated_landing_feed', 10)
-        self.bridge = cv2.CvBridge()
+        self.image_publisher = self.create_publisher(Image, 'annotated_landing_feed', 10)
+        self.bridge = CvBridge()
         self.cap = cv2.VideoCapture(4)  # Change camera index as needed
         if not self.cap.isOpened():
             self.get_logger().error("Could not open camera.")
@@ -83,10 +85,12 @@ class CombinedDetector(Node):
 
         self.publisher_.publish(status_msg)
         image_msg = self.bridge.cv2_to_imgmsg(frame, encoding="bgr8")
-        self.image_pub.publish(image_msg)
+        self.image_publisher.publish(image_msg)
         end = time.time()
         elapsed_ms = (end - start) * 1000
-        self.get_logger().info(f"Detection Time: {elapsed_ms:.2f} ms, Status: {status_msg.data}")
+        actual_fps = self.cap.get(cv2.CAP_PROP_FPS)
+        #self.get_logger().info(f"Detection Time: {elapsed_ms:.2f} ms, Status: {status_msg.data}")
+        self.get_logger().info(f"Actual FPS: {actual_fps} , Status: {status_msg.data}")
 
     def destroy_node(self):
         self.cap.release()
@@ -95,8 +99,10 @@ class CombinedDetector(Node):
 def main(args=None):
     rclpy.init(args=args)
     node = CombinedDetector()
+    executor = MultiThreadedExecutor()
+    executor.add_node(node)
     try:
-        rclpy.spin(node)
+        executor.spin()
     except KeyboardInterrupt:
         pass
     finally:

@@ -4,7 +4,7 @@ set -e
 source /opt/ros/humble/setup.bash
 source /opt/venv/bin/activate
 cd /ros2_ws
-colcon build
+colcon build --packages-ignore foxglove_node foxglove_node_msgs
 source install/setup.bash
 
 # Define each package and its launch command
@@ -26,11 +26,8 @@ read -r DEBUG_MODE
 
 # If debug mode, create tmux session first
 if [[ "$DEBUG_MODE" == "y" || "$DEBUG_MODE" == "Y" ]]; then
-	tmux list-sessions
     tmux has-session -t drone_launcher 2>/dev/null && tmux kill-session -t drone_launcher
-	tmux list-sessions
-    tmux new-session -d -s drone_launcher -n starter "echo 'Starting drone packages...'; sleep 3"
-	tmux list-sessions
+    tmux new-session -d -s drone_launcher -n control bash
 fi
 
 start_package() {
@@ -41,7 +38,6 @@ start_package() {
 
     if [[ "$DEBUG_MODE" == "y" || "$DEBUG_MODE" == "Y" ]]; then
         # Create a new tmux window in the master session for this package  
-	tmux list-sessions
 	tmux split-window -t drone_launcher -h "$cmd"
 	tmux select-layout -t drone_launcher tiled
 
