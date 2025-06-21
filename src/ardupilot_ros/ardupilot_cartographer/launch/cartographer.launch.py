@@ -11,7 +11,7 @@ from pathlib import Path
 
 def generate_launch_description():
     ## ***** Launch arguments *****
-    use_sim_time_arg = DeclareLaunchArgument("use_sim_time", default_value="true")
+    use_sim_time_arg = DeclareLaunchArgument("use_sim_time", default_value="false")
     rviz_arg = DeclareLaunchArgument(
         "rviz", default_value="false", description="Open RViz."
     )
@@ -32,7 +32,7 @@ def generate_launch_description():
         remappings=[
             ("/imu", "/imu"),
             ("/odom", "/odometry"),
-            ("scan", "/scan")
+            ('scan', '/scan')
         ],
     )
 
@@ -45,11 +45,11 @@ def generate_launch_description():
         ],
     )
 
-    transform_node = Node(
+    temp_tf_node = Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'laser']
-        )
+        ) #Once we have a fix drone dele this node
 
     # Robot description.
 
@@ -89,8 +89,8 @@ def generate_launch_description():
             use_sim_time_arg,
             rviz_arg,
             # Nodes
+            temp_tf_node, # disbale this node when we have the pixwak
             cartographer_node,
-            transform_node,
             cartographer_occupancy_grid_node,
             rviz,
         ]
