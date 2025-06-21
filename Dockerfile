@@ -94,19 +94,6 @@ RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc && \
      echo "source $VENV_PATH/bin/activate" >> /root/.bashrc
 
 # To get /mavros/rangefinder/rangefinder to work
-Run echo "/**:
-  ros__parameters:
-    plugin_denylist:
-      # common
-
-      # extras
-      - image_pub
-      - vibration
-      - wheel_odometry
-
-    plugin_allowlist:
-    #   - 'sys_*'" > /opt/ros/humble/share/mavros/launch/px4_pluginlists.yaml
-
 RUN cat <<EOF > /opt/ros/humble/share/mavros/launch/px4_pluginlists.yaml
 /**:
   ros__parameters:
