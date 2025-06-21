@@ -1,0 +1,1 @@
+print("Node started: subscribing to /cmd_vel")
