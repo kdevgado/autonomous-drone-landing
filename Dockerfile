@@ -66,12 +66,14 @@ RUN geographiclib-get-geoids egm96-5
 # Create a virtual environment
 RUN python3 -m venv $VENV_PATH
  
-# Activate virtualenv
+# Activate virtualen
+
 ENV PATH="$VENV_PATH/bin:$PATH"
 
 RUN $VENV_PATH/bin/pip install --upgrade pip && \
     $VENV_PATH/bin/pip install \
     opencv-python-headless \
+    MAVProxy \
     "numpy<2" \
     pyrealsense2 \
     "ultralytics[dev]" \
@@ -90,6 +92,35 @@ RUN $VENV_PATH/bin/pip install --upgrade pip && \
 RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc && \
     echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> /root/.bashrc && \
      echo "source $VENV_PATH/bin/activate" >> /root/.bashrc
+
+# To get /mavros/rangefinder/rangefinder to work
+Run echo "/**:
+  ros__parameters:
+    plugin_denylist:
+      # common
+
+      # extras
+      - image_pub
+      - vibration
+      - wheel_odometry
+
+    plugin_allowlist:
+    #   - 'sys_*'" > /opt/ros/humble/share/mavros/launch/px4_pluginlists.yaml
+
+RUN cat <<EOF > /opt/ros/humble/share/mavros/launch/px4_pluginlists.yaml
+/**:
+  ros__parameters:
+    plugin_denylist:
+      # common
+
+      # extras
+      - image_pub
+      - vibration
+      - wheel_odometry
+
+    plugin_allowlist:
+    #   - 'sys_*'
+EOF
 
 # Setting up librealsense2
 RUN cd /opt && \

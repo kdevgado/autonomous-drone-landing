@@ -9,13 +9,13 @@ source install/setup.bash
 
 # Define each package and its launch command
 declare -A PACKAGE_COMMANDS
+PACKAGE_COMMANDS["mavros"]="ros2 launch mavros px4.launch"
 PACKAGE_COMMANDS["rplidar_ros"]="ros2 launch rplidar_ros rplidar_a3_launch.py"
 PACKAGE_COMMANDS["ardupilot_cartographer"]="ros2 launch ardupilot_cartographer cartographer.launch.py"
 PACKAGE_COMMANDS["landing_pad_detector"]="ros2 run landing_pad_detector detector_node"
 # PACKAGE_COMMANDS["jetson_monitor"]="ros2 launch data_monitor jetson_monitor_node"
 # PACKAGE_COMMANDS["drone_monitor"]="ros2 launch data_monitor drone_monitor_node"
 PACKAGE_COMMANDS["foxglove_bridge"]="ros2 launch foxglove_bridge foxglove_bridge_launch.xml"
-PACKAGE_COMMANDS["mavros"]="ros2 run mavros mavros_node --ros-args -p fcu_url:=serial:///dev/ttyACM0:57600"
 
 echo "Do you want to start the entire drone system? (y/n)"
 read -r FULL_START
