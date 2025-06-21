@@ -30,9 +30,11 @@ class DroneController(Node):
         # Run steps
         self.set_mode('GUIDED')
         self.arm(True)
-        self.takeoff(10.0)  # Altitude in meters
+        self.takeoff(1.0)  # Altitude in meters
 
-        self.timer = self.create_timer(10.0, self.goto_waypoint)
+        # self.timer = self.create_timer(10.0, self.goto_waypoint)
+
+        
 
     def set_mode(self, mode):
         req = SetMode.Request()
@@ -75,7 +77,7 @@ class DroneController(Node):
         target.header.frame_id = 'map'
         target.pose.position.x = 10.0
         target.pose.position.y = 5.0
-        target.pose.position.z = 10.0
+        target.pose.position.z = 1.0
         target.pose.orientation.w = 1.0
         self.get_logger().info('Sending waypoint...')
         for _ in range(100):
