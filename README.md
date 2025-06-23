@@ -1,4 +1,8 @@
-# combined-ws
+# 🛸 Autonomous Drone Navigation & Landing System
+
+This project showcases my contribution to an autonomous drone landing system developed as part of the **RoboCup Flying Robot League** under the **RMIT UAV Research Team**.
+
+> **Note:** This is a public summary repository. The original source code is private and maintained by the [flying-robot-league](https://github.com/flying-robot-league) organization at RMIT.
 
 ## Combined ROS 2 Workspace
 
@@ -6,7 +10,9 @@ This repository contains a combined ROS 2 workspace used for developing and test
 
 ---
 
-## 🧠 Overview
+## 📌 Project Overview
+
+Our goal was to enable a drone to autonomously navigate and land on designated targets without relying on GPS. The project was part of Phase 1 of the RoboCup Flying Robot League competition.
 
 The workspace includes the following components:
 
@@ -19,6 +25,12 @@ The workspace includes the following components:
 These packages are intended to work together in a containerized environment using Docker.
 
 ---
+
+### 🔧 Key Features
+- GPS-free navigation using **Cartographer SLAM** and **MAVROS**
+- Hybrid detection system integrating **YOLOv8**, **Hough Transform**, and custom object filters
+- Real-time landing pad recognition with >98% detection accuracy in simulation
+- Seamless return-to-origin logic using onboard visual odometry
 
 ## 📦 Package Descriptions
 
